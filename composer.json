@@ -1,0 +1,31 @@
+{
+    "name": "runelaenen/sw6-order-cleanup",
+    "description": "Adds an admin button to clear all placed orders, documents and reset number generators",
+    "type": "shopware-platform-plugin",
+    "version": "1.0.0",
+    "license": "MIT",
+    "require": {
+        "shopware/core": "~6.6.0"
+    },
+    "extra": {
+        "shopware-plugin-class": "OrderCleanup\\OrderCleanup",
+        "label": {
+            "de-DE": "Bestellungen bereinigen",
+            "en-GB": "Order Cleanup"
+        },
+        "description": {
+            "de-DE": "Fügt eine Schaltfläche im Adminbereich hinzu, um alle Bestellungen, Dokumente zu löschen und Nummernkreise zurückzusetzen",
+            "en-GB": "Adds an admin button to clear all placed orders, documents and reset number generators"
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "OrderCleanup\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "OrderCleanup\\Tests\\": "tests/"
+        }
+    }
+}

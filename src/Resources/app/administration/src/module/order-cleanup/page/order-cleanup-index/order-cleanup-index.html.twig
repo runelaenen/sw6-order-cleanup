@@ -1,0 +1,49 @@
+<sw-page class="order-cleanup-index">
+    <template #smart-bar-header>
+        <h2>{{ $tc('order-cleanup.general.title') }}</h2>
+    </template>
+
+    <template #content>
+        <sw-card-view>
+            <sw-card :title="$tc('order-cleanup.card.title')" :is-loading="isLoading">
+                <sw-alert variant="warning" :show-icon="true">
+                    {{ $tc('order-cleanup.card.warning') }}
+                </sw-alert>
+
+                <p>{{ $tc('order-cleanup.card.description') }}</p>
+
+                <ul>
+                    <li>{{ $tc('order-cleanup.card.item.orders') }}</li>
+                    <li>{{ $tc('order-cleanup.card.item.documents') }}</li>
+                    <li>{{ $tc('order-cleanup.card.item.media') }}</li>
+                    <li>{{ $tc('order-cleanup.card.item.numberRanges') }}</li>
+                </ul>
+
+                <mt-button
+                    variant="critical"
+                    :disabled="isLoading"
+                    @click="openConfirmModal">
+                    {{ $tc('order-cleanup.card.button') }}
+                </mt-button>
+            </sw-card>
+        </sw-card-view>
+
+        <sw-modal
+            v-if="showConfirmModal"
+            :title="$tc('order-cleanup.modal.title')"
+            variant="small"
+            @modal-close="closeConfirmModal">
+
+            <p>{{ $tc('order-cleanup.modal.body') }}</p>
+
+            <template #modal-footer>
+                <mt-button @click="closeConfirmModal">
+                    {{ $tc('order-cleanup.modal.cancel') }}
+                </mt-button>
+                <mt-button variant="critical" @click="performCleanup">
+                    {{ $tc('order-cleanup.modal.confirm') }}
+                </mt-button>
+            </template>
+        </sw-modal>
+    </template>
+</sw-page>
