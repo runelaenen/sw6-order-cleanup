@@ -5,42 +5,119 @@
 
     <template #content>
         <sw-card-view>
-            <sw-card :title="$tc('order-cleanup.card.title')" :is-loading="isLoading">
-                <sw-alert variant="warning" :show-icon="true">
-                    {{ $tc('order-cleanup.card.warning') }}
-                </sw-alert>
 
-                <p>{{ $tc('order-cleanup.card.description') }}</p>
+            {% block order_cleanup_orders_card %}
+            <sw-card :title="$tc('order-cleanup.orders.title')">
 
-                <ul>
-                    <li>{{ $tc('order-cleanup.card.item.orders') }}</li>
-                    <li>{{ $tc('order-cleanup.card.item.documents') }}</li>
-                    <li>{{ $tc('order-cleanup.card.item.media') }}</li>
-                    <li>{{ $tc('order-cleanup.card.item.numberRanges') }}</li>
-                </ul>
+                {% block order_cleanup_orders_progress %}
+                <template v-if="isLoadingOrders">
+                    <p class="order-cleanup-index__progress-label">
+                        {{ $tc('order-cleanup.processing', { processed: orderProcessed, total: orderTotal }) }}
+                        <span class="order-cleanup-index__progress-percentage">({{ orderProgress }}%)</span>
+                    </p>
+                    <sw-progress-bar :value="orderProgress" />
+                </template>
+                {% endblock %}
 
-                <mt-button
-                    variant="critical"
-                    :disabled="isLoading"
-                    @click="openConfirmModal">
-                    {{ $tc('order-cleanup.card.button') }}
-                </mt-button>
+                {% block order_cleanup_orders_content %}
+                <template v-else>
+                    <sw-alert variant="warning" :show-icon="true">
+                        {{ $tc('order-cleanup.orders.warning') }}
+                    </sw-alert>
+
+                    <p>{{ $tc('order-cleanup.orders.description') }}</p>
+
+                    <ul>
+                        <li>{{ $tc('order-cleanup.orders.item.orders') }}</li>
+                        <li>{{ $tc('order-cleanup.orders.item.documents') }}</li>
+                        <li>{{ $tc('order-cleanup.orders.item.media') }}</li>
+                        <li>{{ $tc('order-cleanup.orders.item.numberRanges') }}</li>
+                    </ul>
+
+                    <mt-button
+                        variant="critical"
+                        :disabled="isLoadingCustomers"
+                        @click="showOrderConfirmModal = true">
+                        {{ $tc('order-cleanup.orders.button') }}
+                    </mt-button>
+                </template>
+                {% endblock %}
+
             </sw-card>
+            {% endblock %}
+
+            {% block order_cleanup_customers_card %}
+            <sw-card :title="$tc('order-cleanup.customers.title')">
+
+                {% block order_cleanup_customers_progress %}
+                <template v-if="isLoadingCustomers">
+                    <p class="order-cleanup-index__progress-label">
+                        {{ $tc('order-cleanup.processing', { processed: customerProcessed, total: customerTotal }) }}
+                        <span class="order-cleanup-index__progress-percentage">({{ customerProgress }}%)</span>
+                    </p>
+                    <sw-progress-bar :value="customerProgress" />
+                </template>
+                {% endblock %}
+
+                {% block order_cleanup_customers_content %}
+                <template v-else>
+                    <sw-alert variant="warning" :show-icon="true">
+                        {{ $tc('order-cleanup.customers.warning') }}
+                    </sw-alert>
+
+                    <p>{{ $tc('order-cleanup.customers.description') }}</p>
+
+                    <ul>
+                        <li>{{ $tc('order-cleanup.customers.item.customers') }}</li>
+                        <li>{{ $tc('order-cleanup.customers.item.addresses') }}</li>
+                        <li>{{ $tc('order-cleanup.customers.item.numberRanges') }}</li>
+                    </ul>
+
+                    <mt-button
+                        variant="critical"
+                        :disabled="isLoadingOrders"
+                        @click="showCustomerConfirmModal = true">
+                        {{ $tc('order-cleanup.customers.button') }}
+                    </mt-button>
+                </template>
+                {% endblock %}
+
+            </sw-card>
+            {% endblock %}
+
         </sw-card-view>
 
         <sw-modal
-            v-if="showConfirmModal"
-            :title="$tc('order-cleanup.modal.title')"
+            v-if="showOrderConfirmModal"
+            :title="$tc('order-cleanup.orders.modal.title')"
             variant="small"
-            @modal-close="closeConfirmModal">
+            @modal-close="showOrderConfirmModal = false">
 
-            <p>{{ $tc('order-cleanup.modal.body') }}</p>
+            <p>{{ $tc('order-cleanup.orders.modal.body') }}</p>
 
             <template #modal-footer>
-                <mt-button @click="closeConfirmModal">
+                <mt-button @click="showOrderConfirmModal = false">
                     {{ $tc('order-cleanup.modal.cancel') }}
                 </mt-button>
-                <mt-button variant="critical" @click="performCleanup">
+                <mt-button variant="critical" @click="performOrderCleanup">
+                    {{ $tc('order-cleanup.modal.confirm') }}
+                </mt-button>
+            </template>
+        </sw-modal>
+
+        <sw-modal
+            v-if="showCustomerConfirmModal"
+            :title="$tc('order-cleanup.customers.modal.title')"
+            variant="small"
+            @modal-close="showCustomerConfirmModal = false">
+
+            <p>{{ $tc('order-cleanup.customers.modal.body') }}</p>
+
+            <template #modal-footer>
+                <mt-button @click="showCustomerConfirmModal = false">
+                    {{ $tc('order-cleanup.modal.cancel') }}
+                </mt-button>
+                <mt-button variant="critical" @click="performCustomerCleanup">
                     {{ $tc('order-cleanup.modal.confirm') }}
                 </mt-button>
             </template>

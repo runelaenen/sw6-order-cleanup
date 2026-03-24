@@ -1,31 +1,55 @@
 {
     "order-cleanup": {
         "general": {
-            "name": "Bestellungen bereinigen",
-            "title": "Bestellungen bereinigen",
-            "description": "Alle Bestellungen und Dokumente löschen und Nummernkreise zurücksetzen"
+            "name": "Bereinigung",
+            "title": "Bereinigung",
+            "description": "Alle Bestellungen, Kunden und Dokumente löschen und Nummernkreise zurücksetzen"
         },
-        "card": {
-            "title": "Gefahrenbereich",
-            "warning": "Diese Aktion ist unwiderruflich und löscht Daten dauerhaft.",
+        "orders": {
+            "title": "Bestellungen",
+            "warning": "Diese Aktion ist unwiderruflich und löscht alle Bestelldaten dauerhaft.",
             "description": "Ein Klick auf den Button unten löscht dauerhaft:",
             "item": {
                 "orders": "Alle Bestellungen und zugehörige Daten (Positionen, Transaktionen, Lieferungen, Adressen)",
                 "documents": "Alle Bestelldokumente (Rechnungen, Gutschriften, usw.)",
                 "media": "Alle Dokumenten-Mediendateien (PDFs) aus der Medienbibliothek",
-                "numberRanges": "Nummernkreis-Zähler (Bestellnummern starten wieder beim konfigurierten Startwert)"
+                "numberRanges": "Nummernkreis-Zähler für Bestellungen und Dokumente (starten wieder beim konfigurierten Startwert)"
             },
-            "button": "Alle Bestellungen löschen"
+            "button": "Alle Bestellungen löschen",
+            "modal": {
+                "title": "Alle Bestellungen löschen?",
+                "body": "Dadurch werden ALLE Bestellungen, Dokumente und Mediendateien dauerhaft gelöscht und alle Bestellungs- und Dokumenten-Nummernkreis-Zähler zurückgesetzt. Diese Aktion kann nicht rückgängig gemacht werden."
+            },
+            "notifications": {
+                "successTitle": "Bestellungen gelöscht",
+                "successMessage": "Alle Bestellungen, Dokumente und Nummernkreis-Zähler wurden gelöscht."
+            }
         },
+        "customers": {
+            "title": "Kunden",
+            "warning": "Diese Aktion ist unwiderruflich und löscht alle Kundendaten dauerhaft.",
+            "description": "Ein Klick auf den Button unten löscht dauerhaft:",
+            "item": {
+                "customers": "Alle Kunden und ihre Zugangsdaten",
+                "addresses": "Alle Kundenadressen",
+                "numberRanges": "Kundennummernkreis-Zähler (startet wieder beim konfigurierten Startwert)"
+            },
+            "button": "Alle Kunden löschen",
+            "modal": {
+                "title": "Alle Kunden löschen?",
+                "body": "Dadurch werden ALLE Kunden und ihre Adressen dauerhaft gelöscht und der Kundennummern-Zähler zurückgesetzt. Diese Aktion kann nicht rückgängig gemacht werden."
+            },
+            "notifications": {
+                "successTitle": "Kunden gelöscht",
+                "successMessage": "Alle Kunden und der Kundennummernkreis-Zähler wurden gelöscht."
+            }
+        },
+        "processing": "{processed} von {total} verarbeitet...",
         "modal": {
-            "title": "Sind Sie sicher?",
-            "body": "Dadurch werden ALLE Bestellungen, Dokumente und Mediendateien dauerhaft gelöscht und alle Bestellnummern-Zähler zurückgesetzt. Diese Aktion kann nicht rückgängig gemacht werden.",
             "cancel": "Abbrechen",
             "confirm": "Ja, alles löschen"
         },
         "notifications": {
-            "successTitle": "Bereinigung abgeschlossen",
-            "successMessage": "Alle Bestellungen, Dokumente und Nummernkreis-Zähler wurden gelöscht.",
             "errorTitle": "Bereinigung fehlgeschlagen",
             "errorMessage": "Beim Bereinigen ist ein Fehler aufgetreten. Bitte prüfen Sie die Logs."
         }

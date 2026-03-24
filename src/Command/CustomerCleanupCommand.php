@@ -12,10 +12,10 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 #[AsCommand(
-    name: 'order-cleanup:clear',
-    description: 'Delete all orders, documents and media files, and reset number range counters',
+    name: 'order-cleanup:clear-customers',
+    description: 'Delete all customers and reset the customer number range counter',
 )]
-class OrderCleanupCommand extends Command
+class CustomerCleanupCommand extends Command
 {
     public function __construct(
         private readonly CleanupService $cleanupService,
@@ -32,7 +32,7 @@ class OrderCleanupCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
-        $io->warning('This will permanently delete ALL orders, documents and media files, and reset all order number counters.');
+        $io->warning('This will permanently delete ALL customers and reset the customer number range counter.');
 
         if (!$input->getOption('no-interaction') && !$io->confirm('Are you sure you want to continue?', false)) {
             $io->comment('Aborted.');
@@ -44,11 +44,11 @@ class OrderCleanupCommand extends Command
         $batch = 0;
 
         do {
-            $hasMore = $this->cleanupService->cleanupOrders($context);
+            $hasMore = $this->cleanupService->cleanupCustomers($context);
             $io->text(sprintf('Processed batch %d...', ++$batch));
         } while ($hasMore);
 
-        $io->success(sprintf('All orders, documents and number range counters have been cleared in %d batch(es).', $batch));
+        $io->success(sprintf('All customers and the customer number range counter have been cleared in %d batch(es).', $batch));
 
         return Command::SUCCESS;
     }

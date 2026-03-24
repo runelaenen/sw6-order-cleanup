@@ -3,29 +3,53 @@
         "general": {
             "name": "Order Cleanup",
             "title": "Order Cleanup",
-            "description": "Clear all orders, documents and reset number generators"
+            "description": "Clear all orders, customers, documents and reset number generators"
         },
-        "card": {
-            "title": "Danger Zone",
-            "warning": "This action is irreversible and will permanently delete data.",
+        "orders": {
+            "title": "Orders",
+            "warning": "This action is irreversible and will permanently delete all order data.",
             "description": "Clicking the button below will permanently delete:",
             "item": {
                 "orders": "All orders and related data (line items, transactions, deliveries, addresses)",
                 "documents": "All order documents (invoices, credit notes, etc.)",
                 "media": "All document media files (PDFs) from the media library",
-                "numberRanges": "Number range counters (order numbers will restart from the configured start value)"
+                "numberRanges": "Number range counters for orders and documents (will restart from the configured start value)"
             },
-            "button": "Clear all orders"
+            "button": "Clear all orders",
+            "modal": {
+                "title": "Clear all orders?",
+                "body": "This will permanently delete ALL orders, documents and media files, and reset all order and document number counters. This action cannot be undone."
+            },
+            "notifications": {
+                "successTitle": "Orders cleared",
+                "successMessage": "All orders, documents and number range counters have been cleared."
+            }
         },
+        "customers": {
+            "title": "Customers",
+            "warning": "This action is irreversible and will permanently delete all customer data.",
+            "description": "Clicking the button below will permanently delete:",
+            "item": {
+                "customers": "All customers and their login credentials",
+                "addresses": "All customer addresses",
+                "numberRanges": "Customer number range counter (will restart from the configured start value)"
+            },
+            "button": "Clear all customers",
+            "modal": {
+                "title": "Clear all customers?",
+                "body": "This will permanently delete ALL customers and their addresses, and reset the customer number counter. This action cannot be undone."
+            },
+            "notifications": {
+                "successTitle": "Customers cleared",
+                "successMessage": "All customers and the customer number range counter have been cleared."
+            }
+        },
+        "processing": "Processing {processed} of {total}...",
         "modal": {
-            "title": "Are you sure?",
-            "body": "This will permanently delete ALL orders, documents and media files, and reset all order number counters. This action cannot be undone.",
             "cancel": "Cancel",
             "confirm": "Yes, delete everything"
         },
         "notifications": {
-            "successTitle": "Cleanup complete",
-            "successMessage": "All orders, documents and number range counters have been cleared.",
             "errorTitle": "Cleanup failed",
             "errorMessage": "An error occurred during cleanup. Please check the logs."
         }

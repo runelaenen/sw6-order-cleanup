@@ -1,0 +1,12 @@
+.order-cleanup-index {
+    &__progress-label {
+        font-size: 14px;
+        color: var(--color-text-primary-default);
+        margin-bottom: 8px;
+    }
+
+    &__progress-percentage {
+        font-weight: 600;
+        color: var(--color-text-primary-default);
+    }
+}
