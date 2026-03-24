@@ -2,7 +2,6 @@
     "name": "runelaenen/sw6-order-cleanup",
     "description": "Adds an admin button to clear all placed orders, documents and reset number generators",
     "type": "shopware-platform-plugin",
-    "version": "1.0.0",
     "license": "MIT",
     "require": {
         "shopware/core": "~6.6.0"
