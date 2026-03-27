@@ -119,11 +119,14 @@ readonly class CleanupService
 
         $childIds = $this->documentRepository->searchIds($childCriteria, $context)->getIds();
         if (!empty($childIds)) {
-            $this->deleteMediaForDocuments($childIds, $context);
+            $childMediaIds = $this->getMediaIdsForDocuments($childIds, $context);
             $this->documentRepository->delete(
-                array_map(fn($id) => ['id' => $id], $childIds),
+                array_map(static fn($id) => ['id' => $id], $childIds),
                 $context
             );
+            if (!empty($childMediaIds)) {
+                $this->mediaRepository->delete($childMediaIds, $context);
+            }
         }
 
         $parentCriteria = new Criteria();
@@ -131,15 +134,18 @@ readonly class CleanupService
 
         $parentIds = $this->documentRepository->searchIds($parentCriteria, $context)->getIds();
         if (!empty($parentIds)) {
-            $this->deleteMediaForDocuments($parentIds, $context);
+            $parentMediaIds = $this->getMediaIdsForDocuments($parentIds, $context);
             $this->documentRepository->delete(
-                array_map(fn($id) => ['id' => $id], $parentIds),
+                array_map(static fn($id) => ['id' => $id], $parentIds),
                 $context
             );
+            if (!empty($parentMediaIds)) {
+                $this->mediaRepository->delete($parentMediaIds, $context);
+            }
         }
     }
 
-    private function deleteMediaForDocuments(array $documentIds, Context $context): void
+    private function getMediaIdsForDocuments(array $documentIds, Context $context): array
     {
         $criteria = new Criteria($documentIds);
         $criteria->addFilter(new NotFilter(NotFilter::CONNECTION_AND, [
@@ -155,9 +161,7 @@ readonly class CleanupService
             }
         }
 
-        if (!empty($mediaIds)) {
-            $this->mediaRepository->delete($mediaIds, $context);
-        }
+        return $mediaIds;
     }
 
     private function resetNumberRangeStatesByTypes(array $technicalNames, Context $context): void
