@@ -5,10 +5,10 @@
 
     <template #content>
         <sw-card-view>
-            <sw-card :title="$tc('order-cleanup.card.title')" :is-loading="isLoading">
-                <sw-alert variant="warning" :show-icon="true">
+            <mt-card :title="$tc('order-cleanup.card.title')" :is-loading="isLoading">
+                <mt-banner variant="attention">
                     {{ $tc('order-cleanup.card.warning') }}
-                </sw-alert>
+                </mt-banner>
 
                 <p>{{ $tc('order-cleanup.card.description') }}</p>
 
@@ -25,7 +25,7 @@
                     @click="openConfirmModal">
                     {{ $tc('order-cleanup.card.button') }}
                 </mt-button>
-            </sw-card>
+            </mt-card>
         </sw-card-view>
 
         <sw-modal
