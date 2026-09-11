@@ -52,6 +52,22 @@
         "notifications": {
             "errorTitle": "Bereinigung fehlgeschlagen",
             "errorMessage": "Beim Bereinigen ist ein Fehler aufgetreten. Bitte prüfen Sie die Logs."
+        },
+        "orderList": {
+            "deleteDocumentsWarning": "Diese Bestellung hat Dokumente (Rechnungen, Gutschriften, usw.), die ebenfalls dauerhaft gelöscht werden.",
+            "bulkDelete": "Auswahl löschen",
+            "bulkDeleteModal": {
+                "title": "Ausgewählte Bestellungen löschen?",
+                "body": "Dadurch werden {count} Bestellung(en) und alle zugehörigen Daten dauerhaft gelöscht.",
+                "documentsWarning": "Alle zugehörigen Dokumente (Rechnungen, Gutschriften, usw.) und deren Mediendateien werden ebenfalls dauerhaft gelöscht.",
+                "confirm": "Ja, ausgewählte Bestellungen löschen"
+            },
+            "notifications": {
+                "bulkSuccessTitle": "Bestellungen gelöscht",
+                "bulkSuccessMessage": "{count} Bestellung(en) und deren zugehörige Dokumente wurden gelöscht.",
+                "errorTitle": "Löschen fehlgeschlagen",
+                "errorMessage": "Beim Löschen der Bestellungen ist ein Fehler aufgetreten. Bitte prüfen Sie die Logs."
+            }
         }
     }
 }

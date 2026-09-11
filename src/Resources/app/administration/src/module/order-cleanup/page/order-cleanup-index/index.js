@@ -39,6 +39,12 @@ Component.register('order-cleanup-index', {
         },
     },
 
+    computed: {
+        canDelete() {
+            return Shopware.Service('acl').can('order.deleter');
+        },
+    },
+
     methods: {
         httpClient() {
             return Service('syncService').httpClient;

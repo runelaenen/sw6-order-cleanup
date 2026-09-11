@@ -40,6 +40,23 @@ readonly class CleanupService
     }
 
     /**
+     * @param string[] $orderIds
+     */
+    public function deleteOrdersByIds(array $orderIds, Context $context): void
+    {
+        if (empty($orderIds)) {
+            return;
+        }
+
+        $this->deleteDocumentsForOrders($orderIds, $context);
+
+        $this->orderRepository->delete(
+            array_map(fn($id) => ['id' => $id], $orderIds),
+            $context
+        );
+    }
+
+    /**
      * Deletes one batch of orders and all their associated documents and media.
      * Returns true if there are more orders to process.
      * Resets number range states on the final batch.

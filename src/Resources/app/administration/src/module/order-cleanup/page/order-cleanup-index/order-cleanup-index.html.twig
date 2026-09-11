@@ -36,7 +36,7 @@
 
                     <mt-button
                         variant="critical"
-                        :disabled="isLoadingCustomers"
+                        :disabled="isLoadingCustomers || !canDelete"
                         @click="showOrderConfirmModal = true">
                         {{ $tc('order-cleanup.orders.button') }}
                     </mt-button>

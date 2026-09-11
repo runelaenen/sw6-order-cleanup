@@ -52,6 +52,22 @@
         "notifications": {
             "errorTitle": "Cleanup failed",
             "errorMessage": "An error occurred during cleanup. Please check the logs."
+        },
+        "orderList": {
+            "deleteDocumentsWarning": "This order has documents (invoices, credit notes, etc.) that will also be permanently deleted.",
+            "bulkDelete": "Delete selected",
+            "bulkDeleteModal": {
+                "title": "Delete selected orders?",
+                "body": "This will permanently delete {count} order(s) and all related data.",
+                "documentsWarning": "All associated documents (invoices, credit notes, etc.) and their media files will also be permanently deleted.",
+                "confirm": "Yes, delete selected orders"
+            },
+            "notifications": {
+                "bulkSuccessTitle": "Orders deleted",
+                "bulkSuccessMessage": "{count} order(s) and their associated documents have been deleted.",
+                "errorTitle": "Deletion failed",
+                "errorMessage": "An error occurred while deleting orders. Please check the logs."
+            }
         }
     }
 }
