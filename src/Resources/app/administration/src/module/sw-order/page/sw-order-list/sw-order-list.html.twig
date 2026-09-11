@@ -1,0 +1,46 @@
+{% block sw_order_list_delete_modal_confirm_delete_text %}
+    <p class="sw-order-list__confirm-delete-text">
+        {{ $tc('sw-order.list.textDeleteConfirm', { orderNumber: `${item.orderNumber}` }, 0) }}
+    </p>
+    <p v-if="item.documents && item.documents.length > 0" class="sw-order-list__confirm-delete-documents-warning">
+        <strong>{{ $tc('order-cleanup.orderList.deleteDocumentsWarning') }}</strong>
+    </p>
+{% endblock %}
+
+{% block sw_order_list_bulk_selected_actions_content %}
+    {% parent %}
+
+    <a
+        v-if="acl.can('order.deleter')"
+        class="link link-danger"
+        role="link"
+        tabindex="0"
+        @click="openBulkDeleteModal"
+        @keydown.enter="openBulkDeleteModal"
+    >
+        {{ $tc('order-cleanup.orderList.bulkDelete') }}
+    </a>
+{% endblock %}
+
+{% block sw_order_list_content %}
+    {% parent %}
+
+    <sw-modal
+        v-if="showBulkDeleteModal"
+        :title="$tc('order-cleanup.orderList.bulkDeleteModal.title')"
+        variant="small"
+        @modal-close="closeBulkDeleteModal"
+    >
+        <p>{{ $tc('order-cleanup.orderList.bulkDeleteModal.body', selectionCount, { count: selectionCount }) }}</p>
+        <p><strong>{{ $tc('order-cleanup.orderList.bulkDeleteModal.documentsWarning') }}</strong></p>
+
+        <template #modal-footer>
+            <mt-button @click="closeBulkDeleteModal">
+                {{ $tc('global.default.cancel') }}
+            </mt-button>
+            <mt-button variant="critical" @click="onConfirmBulkDelete">
+                {{ $tc('order-cleanup.orderList.bulkDeleteModal.confirm') }}
+            </mt-button>
+        </template>
+    </sw-modal>
+{% endblock %}

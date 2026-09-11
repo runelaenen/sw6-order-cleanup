@@ -19,6 +19,6 @@ Shopware.Module.register('order-cleanup', {
         group: 'system',
         to: 'order.cleanup.index',
         icon: 'regular-trash',
-        privilege: 'system.core_update',
+        privilege: 'order.deleter',
     },
 });

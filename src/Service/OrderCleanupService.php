@@ -25,16 +25,38 @@ readonly class OrderCleanupService
 
     public function cleanup(Context $context): void
     {
-        $this->deleteDocuments($context);
-        $this->deleteDocumentMedia($context);
+        $orderIds = $this->orderRepository->searchIds(new Criteria(), $context)->getIds();
 
-        $this->deleteOrders($context);
+        if (!empty($orderIds)) {
+            $this->deleteOrdersByIds($orderIds, $context);
+        }
+
         $this->resetNumberRangeStates($context);
     }
 
-    private function deleteDocumentMedia(Context $context): void
+    /**
+     * @param string[] $orderIds
+     */
+    public function deleteOrdersByIds(array $orderIds, Context $context): void
+    {
+        if (empty($orderIds)) {
+            return;
+        }
+
+        $mediaIds = $this->collectDocumentMediaIds($orderIds, $context);
+        $this->deleteDocumentsForOrders($orderIds, $context);
+        $this->deleteMediaByIds($mediaIds, $context);
+        $this->deleteOrders($orderIds, $context);
+    }
+
+    /**
+     * @param string[] $orderIds
+     * @return array<array{id: string}>
+     */
+    private function collectDocumentMediaIds(array $orderIds, Context $context): array
     {
         $criteria = new Criteria();
+        $criteria->addFilter(new EqualsAnyFilter('orderId', $orderIds));
         $criteria->addFilter(new NotFilter(NotFilter::CONNECTION_AND, [
             new EqualsFilter('documentMediaFileId', null),
         ]));
@@ -48,16 +70,30 @@ readonly class OrderCleanupService
             }
         }
 
+        return $mediaIds;
+    }
+
+    /**
+     * @param array<array{id: string}> $mediaIds
+     */
+    private function deleteMediaByIds(array $mediaIds, Context $context): void
+    {
         if (!empty($mediaIds)) {
             $this->mediaRepository->delete($mediaIds, $context);
         }
     }
 
-    private function deleteDocuments(Context $context): void
+    /**
+     * @param string[] $orderIds
+     */
+    private function deleteDocumentsForOrders(array $orderIds, Context $context): void
     {
+        $baseCriteria = new Criteria();
+        $baseCriteria->addFilter(new EqualsAnyFilter('orderId', $orderIds));
+
         // Delete child documents first (e.g. credit notes referencing an invoice)
         // to avoid violating the referenced_document_id ON DELETE RESTRICT constraint
-        $childCriteria = new Criteria();
+        $childCriteria = clone $baseCriteria;
         $childCriteria->addFilter(new NotFilter(NotFilter::CONNECTION_AND, [
             new EqualsFilter('referencedDocumentId', null),
         ]));
@@ -70,7 +106,7 @@ readonly class OrderCleanupService
             );
         }
 
-        $remainingIds = $this->documentRepository->searchIds(new Criteria(), $context)->getIds();
+        $remainingIds = $this->documentRepository->searchIds($baseCriteria, $context)->getIds();
         if (!empty($remainingIds)) {
             $this->documentRepository->delete(
                 array_map(fn($id) => ['id' => $id], $remainingIds),
@@ -79,16 +115,13 @@ readonly class OrderCleanupService
         }
     }
 
-    private function deleteOrders(Context $context): void
+    /**
+     * @param string[] $orderIds
+     */
+    private function deleteOrders(array $orderIds, Context $context): void
     {
-        $ids = $this->orderRepository->searchIds(new Criteria(), $context)->getIds();
-
-        if (empty($ids)) {
-            return;
-        }
-
         $this->orderRepository->delete(
-            array_map(fn($id) => ['id' => $id], $ids),
+            array_map(fn($id) => ['id' => $id], $orderIds),
             $context
         );
     }

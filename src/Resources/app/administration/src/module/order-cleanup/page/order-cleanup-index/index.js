@@ -14,6 +14,12 @@ Shopware.Component.register('order-cleanup-index', {
         };
     },
 
+    computed: {
+        canDelete() {
+            return Shopware.Service('acl').can('order.deleter');
+        },
+    },
+
     methods: {
         openConfirmModal() {
             this.showConfirmModal = true;

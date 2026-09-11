@@ -6,16 +6,17 @@ use OrderCleanup\Service\OrderCleanupService;
 use Shopware\Core\Framework\Context;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 #[AsCommand(
-    name: 'order-cleanup:clear',
-    description: 'Delete all orders, documents and media files, and reset number range counters',
+    name: 'order-cleanup:delete',
+    description: 'Delete one or more orders by ID, including their documents and media files',
 )]
-class OrderCleanupCommand extends Command
+class OrderDeleteCommand extends Command
 {
     public function __construct(
         private readonly OrderCleanupService $orderCleanupService,
@@ -25,14 +26,21 @@ class OrderCleanupCommand extends Command
 
     protected function configure(): void
     {
-        $this->addOption('no-interaction', 'n', InputOption::VALUE_NONE, 'Skip confirmation prompt');
+        $this
+            ->addArgument('ids', InputArgument::IS_ARRAY | InputArgument::REQUIRED, 'One or more order IDs to delete')
+            ->addOption('no-interaction', 'n', InputOption::VALUE_NONE, 'Skip confirmation prompt');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
+        $ids = $input->getArgument('ids');
 
-        $io->warning('This will permanently delete ALL orders, documents and media files, and reset all order number counters.');
+        $count = \count($ids);
+        $io->warning(\sprintf(
+            'This will permanently delete %d order(s) and all associated documents and media files.',
+            $count,
+        ));
 
         if (!$input->getOption('no-interaction') && !$io->confirm('Are you sure you want to continue?', false)) {
             $io->comment('Aborted.');
@@ -40,11 +48,9 @@ class OrderCleanupCommand extends Command
             return Command::SUCCESS;
         }
 
-        $io->text('Running cleanup...');
+        $this->orderCleanupService->deleteOrdersByIds($ids, Context::createCLIContext());
 
-        $this->orderCleanupService->cleanup(Context::createCLIContext());
-
-        $io->success('All orders, documents and number range counters have been cleared.');
+        $io->success(\sprintf('%d order(s) and their documents have been deleted.', $count));
 
         return Command::SUCCESS;
     }

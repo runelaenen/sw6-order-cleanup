@@ -21,7 +21,7 @@
 
                 <mt-button
                     variant="critical"
-                    :disabled="isLoading"
+                    :disabled="isLoading || !canDelete"
                     @click="openConfirmModal">
                     {{ $tc('order-cleanup.card.button') }}
                 </mt-button>
